@@ -1,3 +1,5 @@
 from django.contrib import admin
+from users.models import UserContactModel,PasswordResetOtp
 
-# Register your models here.
+admin.site.register(UserContactModel)
+admin.site.register(PasswordResetOtp)

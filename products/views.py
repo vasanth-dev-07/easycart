@@ -3,9 +3,14 @@ from django.contrib.auth.models import User
 from .serializers import  ProductSerializer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView,status
 from .models import ProductModel
+
+class ProductList(generics.ListAPIView):
+    queryset = ProductModel.objects.all()
+    serializer_class = ProductSerializer
 
 class ProductCRUDApi(APIView):
     def get(self,request,*args,**kwargs):
@@ -49,6 +54,25 @@ class ProductCRUDApi(APIView):
         if product:
             product.delete()
             return Response({"message": "Product deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        
+
+class FilterApi(APIView):
+    def get(self,request,*args,**kwargs):
+        # Extract query parameters
+        category = request.query_params.get('category')
+        subcategory = request.query_params.get('subcategory')
+        products = ProductModel.objects.all()
+        if category:
+            products = products.filter(category__name = category)
+        if subcategory:
+            products = products.filter(subcategory__name = subcategory)
+        serializer = ProductSerializer(products,many = True)
+        return Response(serializer.data)
+
+
+
+
+
 
 
 
