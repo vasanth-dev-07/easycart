@@ -32,11 +32,12 @@ cd easycart
 python3 -m venv venv
 
 3️⃣ Activate Virtual Environment
+
 macOS / Linux
 source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 
-Windows
-venv\Scripts\activate
 
 4️⃣ Install Dependencies
 pip install -r requirements.txt
@@ -45,10 +46,10 @@ pip install -r requirements.txt
 python manage.py migrate
 
 6️⃣ Run Development Server
+
 python manage.py runserver
+Server runs at http://127.0.0.1:8000 by default.
 
-
-Server will run at:
 
 http://127.0.0.1:8000/
 
