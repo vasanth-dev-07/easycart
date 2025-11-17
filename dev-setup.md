@@ -5,55 +5,94 @@ This document explains how to set up and run the EasyCart project on your local 
 ---
 
 ## 📌 Purpose of This File
-- To guide new developers on how to run the project locally
-- To ensure setup steps are standard for everyone
-- To reduce confusion and save onboarding time
+
+* To guide new developers on how to run the project locally
+* To ensure setup steps are standard for everyone
+* To reduce confusion and save onboarding time
 
 ---
 
 ## 🧰 Requirements / Prerequisites
+
 Make sure the following tools are installed:
 
-- Python 3.10+
-- Django 5+
-- Git
-- Virtual Environment (venv)
-- SQLite (default) or PostgreSQL (optional)
-- Node.js & npm (optional for frontend)
+* Python 3.10+
+* Django 5+
+* Git
+* Virtual Environment (venv)
+* SQLite (default) or PostgreSQL (optional)
+* Node.js & npm (optional for frontend)
 
 ---
 
 ## 🚀 Clone the Repository
+
 ```bash
 git clone git@github.com:vasanth-dev-07/easycart.git
 cd easycart
+```
 
-2️⃣ Create Virtual Environment
+---
+
+## ⚙️ Backend Setup
+
+### 1️⃣ Create Virtual Environment
+
+```bash
 python3 -m venv venv
+```
 
-3️⃣ Activate Virtual Environment
+### 2️⃣ Activate Virtual Environment
 
-macOS / Linux
+#### macOS / Linux
+
+```bash
 source venv/bin/activate
-python3 -m venv venv
-source venv/bin/activate
+```
 
+#### Windows (PowerShell)
 
-4️⃣ Install Dependencies
+```powershell
+venv\Scripts\Activate
+```
+
+### 3️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-5️⃣ Apply Migrations
+### 4️⃣ Create Environment File
+
+```bash
+cp .env.example .env
+```
+
+> Then update `.env` values such as `SECRET_KEY`, database credentials, and email configuration.
+
+### 5️⃣ Apply Migrations
+
+```bash
 python manage.py migrate
+```
 
-6️⃣ Run Development Server
+### 6️⃣ Run Development Server
 
+```bash
 python manage.py runserver
-Server runs at http://127.0.0.1:8000 by default.
+```
 
+The server runs at:
 
+```
 http://127.0.0.1:8000/
+```
 
-📂 Project Structure
+---
+
+## 📂 Project Structure
+
+```
 easycart/
 ├── venv/                     # Virtual environment
 ├── backend/ or project/      # Main Django project directory
@@ -62,40 +101,79 @@ easycart/
 ├── manage.py                 # Django entrypoint
 ├── dev-setup.md              # This documentation file
 └── README.md
+```
 
-🔧 Useful Commands
+---
 
-Command	Description
+## 🔧 Useful Commands
 
-pip freeze > requirements.txt	Update dependencies file
-python manage.py createsuperuser	Create admin account
-deactivate	Exit virtual environment
+| Command                            | Description              |
+| ---------------------------------- | ------------------------ |
+| `pip freeze > requirements.txt`    | Update dependencies file |
+| `python manage.py createsuperuser` | Create admin account     |
+| `deactivate`                       | Exit virtual environment |
 
+---
 
-🎯 Purpose of This File
+## 🤝 Contributing
 
-Helps new developers quickly set up environment
+### Create a new branch
 
-Documents tools and versions used in development
-
-Prevents onboarding confusion and setup errors
-
-🤝 Contributing
-
-Create a new branch for each feature
-
+```bash
 git checkout -b feature-name
+```
 
+### Commit changes
 
-Commit your changes
-
+```bash
 git commit -m "Add feature"
+```
 
+### Push branch
 
-Push branch
-
+```bash
 git push origin feature-name
+```
 
-🧑‍💻 Author
+---
 
-Vasanth Kumar – Python Backend Developer | EasyCart Project
+## 🧑‍💻 Author
+
+**Vasanth Kumar** – Python Backend Developer | EasyCart Project
+
+
+
+
+🛠️ Troubleshooting (Common Issues)
+
+❗ Missing .env file or variables
+
+Error: KeyError: 'SECRET_KEY' or email/db config errors
+Fix:
+
+cp .env.example .env
+
+
+Fill required fields.
+
+❗ Migration / DB errors
+
+Error: no such table: or relation does not exist
+Fix:
+
+python manage.py migrate --run-syncdb
+
+❗ Server Won’t Start
+
+Try:
+
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+❗ Missing migrations
+python manage.py makemigrations
+python manage.py migrate
+
+
+Always commit migration files inside each app’s migrations/ folder.
