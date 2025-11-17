@@ -5,15 +5,18 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView,status
+from rest_framework.permissions import AllowAny
 from django.core.mail import EmailMessage
 from django.contrib.auth import authenticate
 from .models import PasswordResetOtp
 import random
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 
 class UserLoginModelViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
     
     def create(self,request,*args,**kwargs):
         serializer = self.get_serializer(data = request.data)
@@ -39,6 +42,9 @@ class UserLoginModelViewSet(ModelViewSet):
             )
 
 class SigninApiView(APIView):
+    
+    permission_classes = [AllowAny]
+
     def post(self, request):
         user_name = request.data.get('username')
         password = request.data.get('password')
@@ -55,11 +61,22 @@ class SigninApiView(APIView):
             }, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-
 class LogoutApiView(APIView):
-    def post(self,request):
-        return Response ({'message':"Logout Successfully !!!"})
-    
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh')
+            if not refresh_token:
+                return Response({'error': 'Refresh token required'}, status=400)
+
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response({'message': 'Logout Successfully !!!'}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({'error': 'Invalid or expired token'}, status=400)
+
+
+        
 class ContactUsApiView(APIView):
     def post(self,request):
         name = request.data.get('name')

@@ -7,10 +7,12 @@ from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView,status
 from .models import ProductModel
+from rest_framework.permissions import AllowAny
 
 class ProductList(generics.ListAPIView):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny] 
 
 class ProductCRUDApi(APIView):
     def get(self,request,*args,**kwargs):
