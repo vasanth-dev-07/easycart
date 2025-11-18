@@ -1,17 +1,15 @@
-from django.urls import path,include
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserLoginModelViewSet , SigninApiView,LogoutApiView,ContactUsApiView,SendOtpApiView,ValidateOtp,ResetPassword
+from .views import UserLoginModelViewSet, SigninApiView, LogoutApiView, ContactUsApiView, SendOtpApiView, ValidateOtp, ResetPassword
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-
-
 router = DefaultRouter()
-router.register('register', UserLoginModelViewSet) 
+# Remove UserLoginModelViewSet from the router
 
 urlpatterns = [
-    path('', include(router.urls)),
-      
-    path('logout/', LogoutApiView.as_view(), name='logout'),  
+    path('', include(router.urls)),  # Include router-generated URLs
+    path('register/', UserLoginModelViewSet.as_view(), name='register'),  # Define manually
+    path('logout/', LogoutApiView.as_view(), name='logout'),
     path('sendotp/', SendOtpApiView.as_view(), name='otp'),  
     path('validateotp/', ValidateOtp.as_view(), name='validateotp'),  
     path('resetpassword/', ResetPassword.as_view(), name='resetpassword'),  

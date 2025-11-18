@@ -7,13 +7,21 @@ from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView,status
 from .models import ProductModel
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny,IsAdminUser
+from .permission import IsAdminOrReadOnly   
 
-class ProductList(generics.ListAPIView):
+class ProductList(ModelViewSet):
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny] 
+    permission_classes = [IsAdminOrReadOnly]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    
 class ProductCRUDApi(APIView):
     def get(self,request,*args,**kwargs):
         product_name = kwargs.get('name')

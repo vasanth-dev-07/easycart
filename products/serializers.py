@@ -3,19 +3,16 @@ from rest_framework import serializers
 from .models import ProductModel
 
 class ProductSerializer(serializers.ModelSerializer):
-    class Meta :
+    class Meta:
         model = ProductModel
-        fields = '__all__'
+        fields = "__all__"
 
-    def validate_price(self,value):
-        if value <= 0 :
-            raise(serializers.ValidationError("Price Must Be Greater Than Zero"))
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Price must be greater than 0")
         return value
-    def validate_stock(self,value):
-        if value <= 0 :
-            raise(serializers.ValidationError('Stock should be greater that 0'))
+
+    def validate_stock(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Stock must be greater than 0")
         return value
-    def create(self, validated_data):
-        product = ProductModel.objects.create(**validated_data)
-        return product
-    
